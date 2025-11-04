@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Summarizer Assistant</title>
+  <style>
+    :root{
+      --bg: #f0f8ff;        /* aliceblue */
+      --card: #ffffff;
+      --text: #0f172a;      /* slate-900 */
+      --muted: #475569;     /* slate-600 */
+      --border: #cbd5e1;    /* slate-300 */
+      --brand: #2563eb;     /* blue-600 */
+      --brand-600: #1d4ed8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      width: 500px;
+      height: 600px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    h2 {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .select, .input, button {
+      font: inherit;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 8px 10px;
+    }
+
+    .select, .input { width: 100%; }
+
+    button {
+      border: none;
+      background: var(--brand);
+      color: #fff;
+      cursor: pointer;
+      transition: transform .02s ease, background .15s ease;
+    }
+
+    button:hover { background: var(--brand-600); }
+    button:active { transform: translateY(1px); }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    pre {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      width: 100%;
+      height: 360px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ghost {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .status {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Simple spinner (hidden by default) */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+      margin-left: 6px;
+    }
+    .spinner.active { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Summarize Current Page</h2>
+
+    <!-- Optional controls (safe to ignore if popup.js doesn't use them yet) -->
+    <div class="controls" role="group" aria-label="Summary options">
+      <select id="lengthSelect" class="select" title="Summary length (optional)">
+        <option value="auto" selected>Length: Auto</option>
+        <option value="short">Short</option>
+        <option value="medium">Medium</option>
+        <option value="long">Long</option>
+        <option value="bullets">Bulleted</option>
+      </select>
+
+      <button id="summarizeBtn" aria-label="Summarize current tab">Summarize</button>
+      <button id="copyBtn" class="ghost" aria-label="Copy summary to clipboard">Copy</button>
+    </div>
+
+    <div class="toolbar">
+      <span class="hint">Tip: open a page, then click <strong>Summarize</strong>.</span>
+      <span class="row">
+        <span id="statusText" class="status" aria-live="polite"></span>
+        <span id="spinner" class="spinner" aria-hidden="true"></span>
+      </span>
+    </div>
+
+    <pre id="output">Summary will appear here...</pre>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
